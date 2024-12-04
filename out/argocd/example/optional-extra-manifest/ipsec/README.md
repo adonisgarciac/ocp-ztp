@@ -2,7 +2,7 @@
 
 This folder contains the files to configure IPsec encryption for external traffic
 
-Also available in OpenShift docs: [IPsec encryption for external traffic](https://docs.openshift.com/container-platform/4.16/networking/ovn_kubernetes_network_provider/configuring-ipsec-ovn.html#nw-ovn-ipsec-external_configuring-ipsec-ovn)
+Also available in OpenShift docs: [IPsec encryption for external traffic](https://docs.openshift.com/container-platform/4.17/networking/ovn_kubernetes_network_provider/configuring-ipsec-ovn.html#nw-ovn-ipsec-external_configuring-ipsec-ovn)
 
 ### Prerequisites
 
@@ -55,7 +55,7 @@ Configure the following values in `ipsec-endpoint-config.yml`:
 - `$externalHost` - the external host IP address or DNS hostname
 - `$externalAddress` - the IP address or subnet of the external host
 
-Run `./configure-ipsec.sh` to build the MachineConfig 
+Run `./configure-ipsec.sh` to build the MachineConfig
 
 #### Deploying IPsec encryption
 

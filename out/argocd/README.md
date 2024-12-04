@@ -29,7 +29,7 @@ Create a GIT repository for hosting site configuration data. The ZTP pipeline wi
 These steps configure your hub cluster with a set of ArgoCD Applications which generate the required installation and policy CRs for each site based on a ZTP gitops flow.
 
 **Requirements:**
-- Openshift Cluster v4.16 as Hub cluster
+- Openshift Cluster v4.17 as Hub cluster
 - Advanced Cluster Management (ACM) operator v2.10/v2.11 installed on the hub cluster
 - Red Hat OpenShift GitOps operator v1.11/1.12 installed on the hub cluster
 
@@ -44,16 +44,16 @@ In order to deploy the OpenShift GitOps operator v1.12 you may apply the provide
 1. Install the [Topology Aware Lifecycle Operator](https://github.com/openshift-kni/cluster-group-upgrades-operator#readme), which will coordinate with any new sites added by ZTP and manage the application of the PGT-generated policies.
 
 2. Customize the ArgoCD patch ([link](ztp/gitops-subscriptions/argocd/deployment/argocd-openshift-gitops-patch.json)) for your environment:
-   1. Select the multicluster-operators-subscription image to work with your ACM version. 
-   
+   1. Select the multicluster-operators-subscription image to work with your ACM version.
+
    | OCP version           | ACM version | MCE version | MCE RHEL version | MCE image   |
    | --------------------- | ----------- | ----------- | -----------------| ----------- |
    | 4.14/4.15/4.16        | 2.8/2.9     | 2.8/2.9     | RHEL8            | registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel8:v2.8, registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel8:v2.9 |
    | 4.14/4.15/4.16        | 2.10/2.11        | 2.10/2.11        | RHEL9            | registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel9:v2.10,registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel9:v2.11 |
-   
-   The version of the multicluster-operators-subscription image should match the ACM version. For instance, for ACM 2.10, use the `multicluster-operators-subscription-rhel9:v2.10` image.  
-   For ACM 2.9, use the `multicluster-operators-subscription-rhel8:v2.9` image.  
-   Beginning with the 2.10 release, RHEL9 is used as the base image for multicluster-operators-subscription-... images. In RHEL9 images, a different universal executable must be copied to work with the ArgoCD version shipped with the GitOps operator. It is located at the following path in the image: `/policy-generator/PolicyGenerator-not-fips-compliant`.  
+
+   The version of the multicluster-operators-subscription image should match the ACM version. For instance, for ACM 2.10, use the `multicluster-operators-subscription-rhel9:v2.10` image.
+   For ACM 2.9, use the `multicluster-operators-subscription-rhel8:v2.9` image.
+   Beginning with the 2.10 release, RHEL9 is used as the base image for multicluster-operators-subscription-... images. In RHEL9 images, a different universal executable must be copied to work with the ArgoCD version shipped with the GitOps operator. It is located at the following path in the image: `/policy-generator/PolicyGenerator-not-fips-compliant`.
    To summarize:
     When using RHEL8 multicluster-operators-subscription-rhel8 images, the following configuration should be used to copy the ACM policy generator executable:
    ```
@@ -76,7 +76,7 @@ In order to deploy the OpenShift GitOps operator v1.12 you may apply the provide
           ]
         }
 
-   ``` 
+   ```
     When using RHEL9 multicluster-operators-subscription-rhel9 images, the following configuration should be used to copy the ACM policy generator executable:
    ```
         {
@@ -104,7 +104,7 @@ In order to deploy the OpenShift GitOps operator v1.12 you may apply the provide
 ```
     $ oc patch argocd openshift-gitops -n openshift-gitops  --type=merge --patch-file out/argocd/deployment/argocd-openshift-gitops-patch.json
 ```
-4. Starting with ACM 2.7, multiclusterengine enables cluster-proxy-addon by default. Patch to disable and clean-up pods in the hub cluster (and managed clusters, if any) responsible for this addon.  
+4. Starting with ACM 2.7, multiclusterengine enables cluster-proxy-addon by default. Patch to disable and clean-up pods in the hub cluster (and managed clusters, if any) responsible for this addon.
 ```
     $ oc patch multiclusterengines.multicluster.openshift.io multiclusterengine --type=merge --patch-file out/argocd/deployment/disable-cluster-proxy-addon.json
 ```
@@ -180,8 +180,8 @@ The following steps prepare the hub cluster for site deployment and initiate ZTP
         - For SNO deployments, you must have exactly one host defined.
         - For 3-node deployments, you must have exactly three hosts defined.
         - For standard deployments, you must have exactly three hosts defined with `role: master` and one or more hosts defined with `role: worker`
-      - The ztp container version specific set of extra-manifest MachineConfigs can be inspected in *out/argocd/extra-manifest*. When `extraManifests.searchPaths` is defined in SiteConfig, one must copy all the contents from *out/argocd/extra-manifest* to the user GIT repository, and include that GIT directory path under `extraManifests.searchPaths`. It will allow those CR files to be applied during cluster installation. When `searchPath` is defined, **the manifests will not be fetched from ztp container**. 
-      - *It is strongly recommended that, user extracts `extra-manifest` and its content and push the content to users GIT repository*. 
+      - The ztp container version specific set of extra-manifest MachineConfigs can be inspected in *out/argocd/extra-manifest*. When `extraManifests.searchPaths` is defined in SiteConfig, one must copy all the contents from *out/argocd/extra-manifest* to the user GIT repository, and include that GIT directory path under `extraManifests.searchPaths`. It will allow those CR files to be applied during cluster installation. When `searchPath` is defined, **the manifests will not be fetched from ztp container**.
+      - *It is strongly recommended that, user extracts `extra-manifest` and its content and push the content to users GIT repository*.
         - For the 4.14 release, we will still support the behavior of `extraManifestPath` and applying default extra manifests from the container during site installation only if `extraManifests.searchPaths` is not declared in the SiteConfig file. Going forward, the behavior will be deprecated and we strongly recommend to use `extraManifests.searchPaths` instead. Deprecation warning of this field is also added in the release.
         - Optional: For provisioning additional install-time manifests on the provisioned cluster, create another directory in your GIT repository (for example, `custom-manifest/`) and add your custom manifest CRs to this directory. In the SiteConfig, refer to this newly created directory via the `extraManifests.searchPaths` field, any CRs in this referenced directory will be appended in addition to the default set of extra manifests. For the same named CR files in multiple directories, the last found file in the directory will override the content.
           ```
@@ -189,7 +189,7 @@ The following steps prepare the hub cluster for site deployment and initiate ZTP
             searchPaths:
              - sno-extra-manifest/ <-- ztp-containers's reference manifests
              - custom-manifests/ <-- user's custom manifests
-          ```      
+          ```
    3. Add the SiteConfig CR to the kustomization.yaml in the 'generators' section, much like in the example out/argocd/example/siteconfig/kustomization.yaml
    4. Commit your SiteConfig and associated kustomization.yaml in git.
 3. Create the PolicyGenTemplate CR for your site in your local clone of the git repository:
@@ -279,7 +279,7 @@ To upgrade an existing GitOps ZTP installation follow the [Upgrade Guide](Upgrad
 As noted above, the ArgoCD pipeline uses the SiteConfig and PolicyGenTemplate CRs from GIT to generate the cluster configuration CRs & ACM policies. The following steps can be used to troubleshoot issues that may occur in this process.
 
 ### Validate generation of installation CRs
-The installation CRs are applied to the hub cluster in a namespace with name matching the site name.  
+The installation CRs are applied to the hub cluster in a namespace with name matching the site name.
 ```
     $ oc get AgentClusterInstall -n <clusterName>
 ```
@@ -292,7 +292,7 @@ If no object is returned, troubleshoot the ArgoCD pipeline flow from SiteConfig 
 
 * If the SiteConfig->ManagedCluster is missing, check if the `clusters` application failed to synchronize the files from GIT to the hub.
 ```
-    $ oc describe -n openshift-gitops application clusters 
+    $ oc describe -n openshift-gitops application clusters
 ```
 
 * Check if the SiteConfig was synced to the hub. If this is the case, then it means there was an error in SiteConfig. To identify that error, look in the ArgoCD UI under the `DESIRED MANIFEST` tab for the synced SiteConfig, under `spec.siteConfigError`. Setting an invalid `extraManifestPath` will raise the error as below:
@@ -356,7 +356,7 @@ syncResult:
 
 ### Validate generation of configuration policy CRs
 
-Policy CRs are generated in the same namespace as the PolicyGenTemplate from which they were created. The same troubleshooting flow applies to all policy CRs generated from PolicyGenTemplates, regardless of whether they are *ztp-common*, *ztp-group* or *ztp-site* based.  
+Policy CRs are generated in the same namespace as the PolicyGenTemplate from which they were created. The same troubleshooting flow applies to all policy CRs generated from PolicyGenTemplates, regardless of whether they are *ztp-common*, *ztp-group* or *ztp-site* based.
 ```
     $ export NS=<namespace>
     $ oc get policy -n $NS
@@ -366,7 +366,7 @@ The expected set of policy wrapped CRs should be displayed.
 If the Policies failed to synchronize follow these troubleshooting steps:
 
 ```
-    $ oc describe -n openshift-gitops application policies 
+    $ oc describe -n openshift-gitops application policies
 ```
 
 1. Check for `Status: Conditions:` which will show error logs. Some example errors are shown below
@@ -424,7 +424,7 @@ Make note of the `PlacementRule` name appropriate for the missing policy (eg *co
 ```
 - The status/decisions should include your cluster name
 - The key/value of the `matchSelector` in the `spec` should match the labels on your managed cluster.
-Check the labels on the MangedCluster:  
+Check the labels on the MangedCluster:
 ```
     $ oc get ManagedCluster $CLUSTER -o jsonpath='{.metadata.labels}' | jq
 ```

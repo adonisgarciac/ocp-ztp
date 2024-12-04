@@ -105,6 +105,7 @@ podman run --log-driver=none --rm registry.redhat.io/openshift4/ztp-site-generat
 ```
 
 You can use the directory structure under out/argocd/example as a reference for the structure and content of your Git repository.
+Modify siteconfig and acmpolicygenerator according to your environment.
 
 2. Modify out/argocd/deployment/argocd-openshift-gitops-patch.json with the right versions.
 
@@ -127,5 +128,3 @@ oc patch multiclusterengines.multicluster.openshift.io multiclusterengine --type
 ```bash
 oc apply -k out/argocd/deployment
 ```
-
-

@@ -9,7 +9,7 @@ spec:
   baseDomain: "example.com"
   pullSecretRef:
     name: "assisted-deployment-pull-secret"
-  clusterImageSetNameRef: "openshift-4.16"
+  clusterImageSetNameRef: "openshift-4.17"
   sshPublicKey: "ssh-rsa AAAA..."
   clusters:
   - clusterName: "example-3node"
@@ -54,7 +54,7 @@ spec:
         bmcCredentialsName:
           name: "example-node1-bmh-secret"
         bootMACAddress: "AA:BB:CC:DD:EE:11"
-        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable 
+        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable
         bootMode: "UEFISecureBoot"
         rootDeviceHints:
           deviceName: "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0"
@@ -92,7 +92,7 @@ spec:
         bmcCredentialsName:
           name: "example-node2-bmh-secret"
         bootMACAddress: "AA:BB:CC:DD:EE:22"
-        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable 
+        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable
         bootMode: "UEFISecureBoot"
         rootDeviceHints:
           deviceName: "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0"
@@ -130,7 +130,7 @@ spec:
         bmcCredentialsName:
           name: "example-node3-bmh-secret"
         bootMACAddress: "AA:BB:CC:DD:EE:33"
-        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable 
+        # Use UEFISecureBoot to enable secure boot for this node, UEFI to disable
         bootMode: "UEFISecureBoot"
         rootDeviceHints:
           deviceName: "/dev/disk/by-path/pci-0000:01:00.0-scsi-0:2:0:0"

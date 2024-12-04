@@ -9,7 +9,7 @@ spec:
   baseDomain: "example.com"
   pullSecretRef:
     name: "assisted-deployment-pull-secret"
-  clusterImageSetNameRef: "openshift-4.17"
+  clusterImageSetNameRef: "img4.17.5-x86-64-appsub"
   sshPublicKey: "ssh-rsa AAAA..."
   clusters:
   - clusterName: "example-3node"

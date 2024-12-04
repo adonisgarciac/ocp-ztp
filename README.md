@@ -123,8 +123,11 @@ oc patch multiclusterengines.multicluster.openshift.io multiclusterengine --type
 
 5. Commit the changes.
 
-4. Apply the pipeline configuration to your hub cluster
+6. Apply the pipeline configuration to your hub cluster
 
 ```bash
 oc apply -k out/argocd/deployment
 ```
+
+7. Create the secretes
+https://docs.openshift.com/container-platform/4.17/edge_computing/ztp-deploying-far-edge-sites.html#ztp-creating-the-site-secrets_ztp-deploying-far-edge-sites
